@@ -33,6 +33,8 @@ public class MainGUI extends JFrame implements ActionListener, ListSelectionList
     JMenuItem mPopupDelete;
     JMenuItem mPopupAdd;
     JMenuItem mPopupMark;
+    JMenuItem mPopupOpenFileInExplorer;
+    JMenuItem mPopupOpenGITLog;
 
     AddFile mAddFile;
 
@@ -78,6 +80,14 @@ public class MainGUI extends JFrame implements ActionListener, ListSelectionList
         mPopupAdd = new JMenuItem("Add");
         mPopupAdd.addActionListener(mAddFile);
         mPopup.add(mPopupAdd);
+
+        mPopupOpenFileInExplorer = new JMenuItem("Open File in Explorer");
+        mPopupOpenFileInExplorer.addActionListener(this);
+        mPopup.add(mPopupOpenFileInExplorer);
+
+        mPopupOpenGITLog = new JMenuItem("Open GIT Log");
+        mPopupOpenGITLog.addActionListener(this);
+        mPopup.add(mPopupOpenGITLog);
     }
 
     private JMenuBar createMenuBar() {
@@ -240,6 +250,22 @@ public class MainGUI extends JFrame implements ActionListener, ListSelectionList
             } catch (IOException e1) {
                 e1.printStackTrace();
             } catch (GitAPIException e1) {
+                e1.printStackTrace();
+            }
+        }else if(e.getSource().equals(mPopupOpenFileInExplorer)){
+            GITFile gitFile = (GITFile) mFileList.getSelectedValue();
+
+            try {
+                Runtime.getRuntime().exec("explorer.exe /select," + gitFile.getFile().getAbsolutePath());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }else if(e.getSource().equals(mPopupOpenGITLog)){
+            GITFile gitFile = (GITFile) mFileList.getSelectedValue();
+
+            try {
+                Runtime.getRuntime().exec("TortoiseGitProc /command:log /path:" + gitFile.getFile().getAbsolutePath());
+            } catch (IOException e1) {
                 e1.printStackTrace();
             }
         }
